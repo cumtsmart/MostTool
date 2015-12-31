@@ -69,6 +69,7 @@ public class ParseLogTools {
                     mostLine.ioType = arr[6];
                     mostLine.tails = arr[7];
 
+                    // 3722172 + 8 [mmcqd/0]	D	D	/vendor/lib/egl/libGLES_mali.so	Random
                     String[] arr2 = arr[7].split(LINE_REGEX);
                     for (String line :arr2) {
                         if (line.startsWith("/")) {
@@ -76,18 +77,52 @@ public class ParseLogTools {
                         }
                     }
 
-                    if (mostLine.action.equals("I")) {
+
+                    mostLine.blkIndex = Integer.valueOf(arr2[0]);
+                    mostLine.blkSize = Integer.valueOf(arr2[2]);
+                    Log.e("yangjun", arr2[0] + ":" + arr2[2]);
+                    // get the ahead most line
+                    int length = partition.allLogs.size();
+                    if (length > 0) {
+                        MostLine aheadLine = partition.allLogs.get(length - 1);
+
+                        if ((aheadLine.blkIndex + aheadLine.blkSize) == mostLine.blkIndex) {
+                            mostLine.isSequence = true;
+                        } else {
+                            mostLine.isSequence = false;
+                        }
+                    } else {
+                        mostLine.isSequence = false;
+                    }
+
+                    if (mostLine.action.equals("D")) {
                         if (mostLine.ioType.startsWith("R")) {
                             partition.readLogs.add(mostLine);
+                            if (mostLine.isSequence) {
+                                partition.readSequence.add(mostLine);
+                            } else {
+                                partition.readRandom.add(mostLine);
+                            }
                         } else if (mostLine.ioType.startsWith("W")) {
                             partition.writeLogs.add(mostLine);
+                            if (mostLine.isSequence) {
+                                partition.writeSequence.add(mostLine);
+                            } else {
+                                partition.writeRandom.add(mostLine);
+                            }
                         }
                     }
 
+                    //
                     partition.allLogs.add(mostLine);
                 }
             }
-            Log.e("yangjun", "size:" + partition.allLogs.size());
+            Log.e("yangjun", "   size:" + partition.allLogs.size());
+            Log.e("yangjun", "RR size:" + partition.readRandom.size());
+            Log.e("yangjun", "RS size:" + partition.readSequence.size());
+            Log.e("yangjun", "WR size:" + partition.writeRandom.size());
+            Log.e("yangjun", "WS size:" + partition.writeSequence.size());
+
         } catch (FileNotFoundException e) {
             Log.e("yangjun", "FileNotFoundException");
             e.printStackTrace();

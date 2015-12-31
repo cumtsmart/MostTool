@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
@@ -21,14 +19,9 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.intel.most.tools.utils.Constant;
+import com.intel.most.tools.handler.BaseHandler;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-
+import esos.MobiBench.MobiBenchExe;
 import eu.chainfire.libsuperuser.Shell;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -49,29 +42,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ProgressDialog progressDialog;
 
-    private Handler mHandler = new Handler() {
-        @Override
+    private final DialogHandler mHandler = new DialogHandler(this);
+
+    static class DialogHandler extends BaseHandler {
+        public DialogHandler(MainActivity activity) {
+            super(activity);
+        }
+
         public void handleMessage(Message msg) {
-            Log.e("yangjun", "------handleMessage------");
-            switch (msg.what) {
-                case SHOW_DIALOG:
-                    Log.e("yangjun", "show");
-                    progressDialog.show();
-                    progressDialog.onStart();
-                    progressDialog.setProgress(0);
-                    break;
-                case UPDATE_PROGRESS:
-                    Log.e("yangjun", "progress");
-                    int progress = msg.arg1;
-                    progressDialog.setProgress(progress);
-                    break;
-                case DISMISS_DIALOG:
-                    Log.e("yangjun", "dismiss");
-                    progressDialog.dismiss();
-                    break;
+            MainActivity activity = (MainActivity)getContext();
+            if (activity != null) {
+                Log.e("yangjun", "------handleMessage------");
+                switch (msg.what) {
+                    case SHOW_DIALOG:
+                        activity.showDialog();
+                        break;
+                    case UPDATE_PROGRESS:
+                        int progress = msg.arg1;
+                        activity.undateProgress(progress);
+                        break;
+                    case DISMISS_DIALOG:
+                        activity.dismissDialog();
+                        break;
+                }
             }
         }
-    };
+    }
+
+    public void showDialog() {
+        Log.e("yangjun", "show");
+        progressDialog.show();
+        progressDialog.onStart();
+        progressDialog.setProgress(0);
+    }
+
+    public void undateProgress(int progress) {
+        Log.e("yangjun", "progress");
+        progressDialog.setProgress(progress);
+    }
+
+    public void dismissDialog() {
+        Log.e("yangjun", "dismiss");
+        progressDialog.dismiss();
+    }
 
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
@@ -109,10 +122,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        // TODO
+        progressDialog.setMessage("progress");
         progressDialog.setMax(100);
         progressDialog.setCancelable(false);
 
-        Log.e("yangjun", "sdcard:" + getExternalFilesDir(null));
+
+        MobiBenchExe bench = new MobiBenchExe(this);
     }
 
     protected void onStart() {

@@ -8,6 +8,11 @@ public class MostLine {
     public String processID;
     public String action;
     public String ioType;
-    public String filePath;
     public String tails;
+    // split from tails
+    public int blkIndex;
+    public int blkSize;
+    public String filePath;
+    // calculate from ahead line
+    public boolean isSequence;
 }

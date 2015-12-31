@@ -7,6 +7,12 @@ public class Partition {
     public ArrayList<MostLine> readLogs = new ArrayList<MostLine>();
     // IO write
     public ArrayList<MostLine> writeLogs = new ArrayList<MostLine>();
+    // Sequence R/W
+    public ArrayList<MostLine> writeSequence = new ArrayList<MostLine>();
+    public ArrayList<MostLine> readSequence = new ArrayList<MostLine>();
+    // Random   R/W
+    public ArrayList<MostLine> writeRandom = new ArrayList<MostLine>();
+    public ArrayList<MostLine> readRandom = new ArrayList<MostLine>();
     // all
     public ArrayList<MostLine> allLogs = new ArrayList<MostLine>();
 }
