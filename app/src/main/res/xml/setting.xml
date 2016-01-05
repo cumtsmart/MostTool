@@ -10,6 +10,7 @@
         <EditTextPreference
             android:key="pref_thd_n"
             android:title="Number of Threads"
+            android:numeric="integer"
             android:defaultValue="1"/>
     </PreferenceCategory>
 
@@ -61,11 +62,13 @@
         <EditTextPreference
             android:key="fr_size"
             android:title="File size(R)"
+            android:numeric="integer"
             android:defaultValue="32"
             android:dependency="partition_n"/>
         <EditTextPreference
             android:key="fw_size"
             android:title="File size(W)"
+            android:numeric="integer"
             android:defaultValue="10"/>
         <ListPreference
             android:key="io_size"
@@ -82,6 +85,7 @@
         <EditTextPreference
             android:key="sql_trans"
             android:title="Transaction(SQLite)"
+            android:numeric="integer"
             android:defaultValue="100"/>
         <ListPreference
             android:key="sql_mode"

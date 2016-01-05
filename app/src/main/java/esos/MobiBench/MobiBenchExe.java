@@ -11,7 +11,6 @@ import android.util.Log;
 import com.intel.most.tools.mobibench.DataItem;
 import com.intel.most.tools.mobibench.ResultActivity;
 import com.intel.most.tools.mobibench.StorageOptions;
-import com.intel.most.tools.mobibench.fragment.MeasureFragment;
 import com.intel.most.tools.mobibench.fragment.SettingFragment;
 
 import java.io.File;

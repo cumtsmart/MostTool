@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Most</string>
-    <string name="action_settings">Settings</string>
     <string name="read_me">1. Click start to start blktrace.\n2. Open your test app.\n3. Click stop to stop blktrace.\n4. Click most to generate most log.\n5. Enter your app package name and click filter.\n6. Click graph to display result.</string>
 
     <string-array name="partition">

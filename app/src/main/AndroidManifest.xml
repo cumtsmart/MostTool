@@ -5,26 +5,39 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:screenOrientation="portrait" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".GraphActivity" />
+        <activity
+            android:name=".GraphActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mobibench.MobiActivity"
+            android:label="Mobibench"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mobibench.ResultActivity"
+            android:label="Mobibench"
+            android:screenOrientation="portrait" />
 
         <service android:name=".ShellService" />
+
     </application>
 
 </manifest>

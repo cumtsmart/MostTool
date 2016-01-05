@@ -125,13 +125,13 @@ public class SettingFragment extends PreferenceFragment implements OnSharedPrefe
         preference.setSummary("Current file journal mode:" + jourSum);
     }
 
-    private static void calculateFreeSpace(String path) {
+    private void calculateFreeSpace(String path) {
         String target_path = null;
         if (path.equals("/data")) {
             target_path = Environment.getDataDirectory().getPath();
             Log.e("yangjun", "----- /data -----");
         } else if (path.equals("/sdcard")) {
-            target_path = Environment.getExternalStorageDirectory().getPath();
+            target_path = getActivity().getExternalFilesDirs(null)[0].getAbsolutePath();
             Log.e("yangjun", "----- /sdcard -----");
         } else if (path.equals("/extSdCard")) {
             target_path = MobiBenchExe.sdcard_2nd_path;

@@ -1,10 +1,12 @@
 package com.intel.most.tools.mobibench.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +41,9 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     private boolean mFlag = false; // using App stop button
 
     private boolean mobiIsRunning = false;
+
+    SharedPreferences sharedPref;
+
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg){
             if(msg.what <= 100) {
@@ -79,6 +84,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         btnCustom.setOnClickListener(this);
 
         mContext = getActivity();
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
         return view;
     }
 
@@ -109,7 +115,11 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                 startMobibenchExe(2);
                 break;
             case R.id.btn_ctm:
-                startMobibenchExe(3);
+                if(!mobiIsRunning && customSelection()){
+                    print_exp(4);
+                }else{
+                    startMobibenchExe(3);
+                }
                 break;
         }
     }
@@ -119,12 +129,37 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
             print_error(0);
         } else {
             mobiIsRunning = true;
-            // TODO: checking space
+
+            String fwSize = sharedPref.getString(SettingFragment.KEY_FW_SIZE, "10");
+            String frSize = sharedPref.getString(SettingFragment.KEY_FR_SIZE, "32");
+            if((Integer.parseInt(fwSize) >= SettingFragment.freeSpace/1024/1024) ||
+                    (Integer.parseInt(frSize) >= SettingFragment.freeSpace/1024/1024)) {
+                print_error(2);
+                mobiIsRunning = false;
+                return;
+            }
+
             mobiExe.setTestType(type);
             print_exp(type);
             mbThread = new MobiBenchExe(mContext, mHandler);
             mbThread.start();
         }
+    }
+
+    private boolean customSelection(){
+        boolean seleted = false;
+        if(sharedPref.getBoolean(SettingFragment.KEY_SEQ_WRITE, false)
+                || sharedPref.getBoolean(SettingFragment.KEY_SEQ_READ, false)
+                || sharedPref.getBoolean(SettingFragment.KEY_RAN_WRITE, false)
+                || sharedPref.getBoolean(SettingFragment.KEY_RAN_READ, false)
+                || sharedPref.getBoolean(SettingFragment.KEY_SQL_INSERT, false)
+                || sharedPref.getBoolean(SettingFragment.KEY_SQL_UPDATE, false)
+                || sharedPref.getBoolean(SettingFragment.KEY_SQL_DELETE, false)) {
+            seleted = true;
+        }else{
+            seleted = false;
+        }
+        return seleted;
     }
 
     public void print_exp(int flag) {

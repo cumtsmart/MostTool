@@ -77,7 +77,6 @@ public class ParseLogTools {
                         }
                     }
 
-
                     mostLine.blkIndex = Integer.valueOf(arr2[0]);
                     mostLine.blkSize = Integer.valueOf(arr2[2]);
                     Log.e("yangjun", arr2[0] + ":" + arr2[2]);
@@ -112,7 +111,6 @@ public class ParseLogTools {
                             }
                         }
                     }
-
                     //
                     partition.allLogs.add(mostLine);
                 }
