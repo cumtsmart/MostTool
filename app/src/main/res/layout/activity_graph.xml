@@ -1,20 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
-    <!-- Graph space -->
-    <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/part_bar_chart"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
-    <!-- Parse action -->
-    <Button
-        android:id="@+id/bt_parse"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:layout_gravity="center"
-        android:text="PARSE"/>
-</LinearLayout>
+        android:layout_height="match_parent" >
+        <!-- Graph space -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="Every partition R/W times:"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:textSize="16sp"/>
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/part_bar_chart"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="IO type percentage:"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:textSize="16sp"/>
+        <com.github.mikephil.charting.charts.PieChart
+            android:layout_marginTop="20dp"
+            android:id="@+id/io_percent"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            />
+        <!-- Display read/write files on 3 partition -->
+        <TextView
+            android:id="@+id/cache_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cache partition visited files:"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/cache_files"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:visibility="gone"
+            android:text=""/>
+        <TextView
+            android:id="@+id/data_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Data partition visited files:"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/data_files"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:visibility="gone"
+            android:text=""/>
+        <TextView
+            android:id="@+id/system_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="System partition visited files:"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/system_files"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:visibility="gone"
+            android:text=""/>
+        <!-- Parse action -->
+        <Button
+            android:id="@+id/bt_parse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_gravity="center"
+            android:text="PARSE"/>
+    </LinearLayout>
+</ScrollView>

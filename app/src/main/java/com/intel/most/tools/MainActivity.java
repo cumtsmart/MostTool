@@ -1,5 +1,6 @@
 package com.intel.most.tools;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,8 +11,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -24,7 +23,7 @@ import com.intel.most.tools.mobibench.MobiActivity;
 
 import eu.chainfire.libsuperuser.Shell;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener {
     private Button mStart;
     private Button mStop;
     private Button mMost;
@@ -104,8 +103,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         mStart = (Button) findViewById(R.id.start);
         mStop = (Button) findViewById(R.id.stop);
@@ -182,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.filter:
-                handleShow(view);
+                handleFilter(view);
                 break;
         }
     }
@@ -190,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void handleStart(View view) {
         mStart.setEnabled(false);
         mStop.setEnabled(true);
+        mMost.setEnabled(false);
         mFilter.setEnabled(false);
 
         if (!Shell.SU.available()) {
@@ -203,19 +201,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mShellService.handleStop();
         mStart.setEnabled(true);
         mStop.setEnabled(false);
-        mFilter.setEnabled(true);
+        mMost.setEnabled(true);
+        mFilter.setEnabled(false);
     }
 
     private void handleMost(View view) {
         Log.e("yangjun", "handleMost");
-        mShellService.handleMost();
-    }
-
-    private void handleShow(View view) {
         mStart.setEnabled(true);
         mStop.setEnabled(false);
+        mMost.setEnabled(true);
+        mShellService.handleMost();
         mFilter.setEnabled(true);
-        //TODO
+    }
+
+    private void handleFilter(View view) {
+        //TODO enable after EditText input text
+        mStart.setEnabled(true);
+        mStop.setEnabled(false);
+        mMost.setEnabled(true);
+        mFilter.setEnabled(true);
         String packName = mEditText.getText().toString().trim();
         mShellService.filterLog(packName);
     }

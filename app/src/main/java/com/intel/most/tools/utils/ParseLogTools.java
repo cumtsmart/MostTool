@@ -74,6 +74,7 @@ public class ParseLogTools {
                     for (String line :arr2) {
                         if (line.startsWith("/")) {
                             mostLine.filePath = line;
+                            partition.visitFiles.add(line);
                         }
                     }
 

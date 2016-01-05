@@ -8,15 +8,24 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.intel.most.tools.data.GraphData;
 import com.intel.most.tools.model.Partition;
 import com.intel.most.tools.utils.ParseLogTools;
@@ -27,19 +36,45 @@ import java.util.List;
 public class GraphActivity extends Activity implements View.OnClickListener {
     private Button btnParse;
     private BarChart partBartChart;
+    private PieChart ioPercentChart;
+
+    private TextView cacheFiles;
+    private TextView dataFiles;
+    private TextView systemFiles;
+
+    private TextView cacheTitle;
+    private TextView dataTitle;
+    private TextView systemTitle;
+
     private GraphData graphData;
     private ProgressDialog progressDialog;
 
     private List<String> mParts = new ArrayList<String>();
+    private List<String> mPieParts = new ArrayList<String>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
+
+        cacheFiles = (TextView)findViewById(R.id.cache_files);
+        dataFiles = (TextView)findViewById(R.id.data_files);
+        systemFiles = (TextView)findViewById(R.id.system_files);
+
+        cacheTitle = (TextView)findViewById(R.id.cache_title);
+        dataTitle = (TextView)findViewById(R.id.data_title);
+        systemTitle = (TextView)findViewById(R.id.system_title);
+
         mParts.add("Cache");
         mParts.add("Data");
         mParts.add("System");
+
+        mPieParts.add("RR");
+        mPieParts.add("RW");
+        mPieParts.add("SR");
+        mPieParts.add("SW");
+
 
         graphData = new GraphData();
         btnParse = (Button)findViewById(R.id.bt_parse);
@@ -77,6 +112,32 @@ public class GraphActivity extends Activity implements View.OnClickListener {
         barData.addXValue(mParts.get(2));
         partBartChart.setData(barData);
         partBartChart.invalidate();
+
+
+        ioPercentChart = (PieChart)findViewById(R.id.io_percent);
+        ioPercentChart.setUsePercentValues(true);
+        ioPercentChart.setDescription("");
+        ioPercentChart.setExtraOffsets(5, 10, 5, 5);
+
+        ioPercentChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
+
+        ioPercentChart.setTransparentCircleColor(Color.WHITE);
+        ioPercentChart.setTransparentCircleAlpha(110);
+        ioPercentChart.setHoleRadius(58f);
+        ioPercentChart.setTransparentCircleRadius(61f);
+        ioPercentChart.setDrawCenterText(true);
+        ioPercentChart.setRotationAngle(0);
+
+        // enable rotation of the chart by touch
+        ioPercentChart.setRotationEnabled(true);
+        ioPercentChart.setHighlightPerTapEnabled(true);
+
+        Legend pieL = ioPercentChart.getLegend();
+        pieL.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);
+        pieL.setXEntrySpace(7f);
+        pieL.setYEntrySpace(0f);
+        pieL.setYOffset(0f);
+
     }
 
     @Override
@@ -123,11 +184,106 @@ public class GraphActivity extends Activity implements View.OnClickListener {
         @Override
         protected void onPostExecute(String s) {
             addDataSet(graphData);
+            addPieData(graphData);
+            addVisitFiles(graphData);
             progressDialog.dismiss();
             Log.e("yangjun", s);
         }
     }
 
+
+    private void addVisitFiles(GraphData graphData) {
+        List<Partition> partitions = graphData.getPartitions();
+        StringBuffer result1 = new StringBuffer();
+        for (String file : partitions.get(0).visitFiles) {
+            if (file.length() > 0) {
+                result1.append("/cache" + file + "\n");
+                cacheFiles.setVisibility(View.VISIBLE);
+                cacheTitle.setVisibility(View.VISIBLE);
+            }
+        }
+        cacheFiles.setText(result1);
+
+        StringBuffer result2 = new StringBuffer();
+        for (String file : partitions.get(1).visitFiles) {
+            if (file.length() > 0) {
+                result2.append("/data" + file + "\n");
+                dataFiles.setVisibility(View.VISIBLE);
+                dataTitle.setVisibility(View.VISIBLE);
+            }
+        }
+        dataFiles.setText(result2);
+
+        StringBuffer result3 = new StringBuffer();
+        for (String file : partitions.get(2).visitFiles) {
+            if (file.length() > 0) {
+                result3.append("/system" + file + "\n");
+                systemFiles.setVisibility(View.VISIBLE);
+                systemTitle.setVisibility(View.VISIBLE);
+            }
+        }
+        systemFiles.setText(result3);
+    }
+
+    private void addPieData(GraphData graphData) {
+        PieData pieData = ioPercentChart.getData();
+        if (pieData != null) {
+            pieData.clearValues();
+            Log.e("yangjun", "pid data is not null");
+        } else {
+            Log.e("yangjun", "pid data is null");
+            pieData = new PieData();
+            pieData.addXValue(mPieParts.get(0));
+            pieData.addXValue(mPieParts.get(1));
+            pieData.addXValue(mPieParts.get(2));
+            pieData.addXValue(mPieParts.get(3));
+        }
+
+
+        List<Partition> partitions = graphData.getPartitions();
+        int[] results = new int[4];
+        results[0] = partitions.get(0).readRandom.size() + partitions.get(1).readRandom.size() + partitions.get(2).readRandom.size();
+        results[1] = partitions.get(0).writeRandom.size() + partitions.get(1).writeRandom.size() + partitions.get(2).writeRandom.size();
+        results[2] = partitions.get(0).readSequence.size() + partitions.get(1).readSequence.size() + partitions.get(2).readSequence.size();
+        results[3] = partitions.get(0).writeSequence.size() + partitions.get(1).writeSequence.size() + partitions.get(2).writeSequence.size();
+
+        ArrayList<Entry> yVals = new ArrayList<Entry>();
+        for (int i = 0; i < 4; i++) {
+            if (results[i] > 0) {
+                yVals.add(new Entry(results[i], i));
+            }
+        }
+
+        PieDataSet dataSet = new PieDataSet(yVals, "IO type");
+        dataSet.setSliceSpace(2f);
+        dataSet.setSelectionShift(5f);
+        pieData.addDataSet(dataSet);
+        pieData.setValueFormatter(new PercentFormatter());
+        pieData.setValueTextSize(11f);
+
+        ArrayList<Integer> colors = new ArrayList<Integer>();
+        for (int c : ColorTemplate.VORDIPLOM_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.JOYFUL_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.COLORFUL_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.LIBERTY_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.PASTEL_COLORS)
+            colors.add(c);
+        colors.add(ColorTemplate.getHoloBlue());
+
+        dataSet.setColors(colors);
+
+        ioPercentChart.setData(pieData);
+        ioPercentChart.notifyDataSetChanged();
+        ioPercentChart.invalidate();
+    }
 
     private void addDataSet(GraphData graphData) {
         Log.e("yangjun", "----- addDataSet ----");
@@ -155,10 +311,6 @@ public class GraphActivity extends Activity implements View.OnClickListener {
         BarDataSet set2 = new BarDataSet(yVals2, "WRITE");
         set2.setColor(Color.rgb(164, 228, 251));
         set2.setValueFormatter(new LargeValueFormatter());
-
-        ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
-        dataSets.add(set1);
-        dataSets.add(set2);
 
         barData.addDataSet(set1);
         barData.addDataSet(set2);

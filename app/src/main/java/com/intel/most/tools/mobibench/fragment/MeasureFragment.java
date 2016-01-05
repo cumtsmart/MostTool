@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.intel.most.tools.R;
-import com.intel.most.tools.handler.BaseHandler;
 
 import esos.MobiBench.MobiBenchExe;
 
@@ -31,7 +30,6 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
     private TextView progressPer;
     private TextView progressTxt;
     private Context mContext;
-
 
     // only used to set value
     private MobiBenchExe mobiExe;
@@ -101,7 +99,6 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
     }
 
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -115,7 +112,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                 startMobibenchExe(2);
                 break;
             case R.id.btn_ctm:
-                if(!mobiIsRunning && customSelection()){
+                if(!mobiIsRunning && !customSelection()){
                     print_exp(4);
                 }else{
                     startMobibenchExe(3);
@@ -132,6 +129,7 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
 
             String fwSize = sharedPref.getString(SettingFragment.KEY_FW_SIZE, "10");
             String frSize = sharedPref.getString(SettingFragment.KEY_FR_SIZE, "32");
+            Log.e("yangjun", "fr:" + frSize + "fw:" + fwSize + ":" + SettingFragment.freeSpace);
             if((Integer.parseInt(fwSize) >= SettingFragment.freeSpace/1024/1024) ||
                     (Integer.parseInt(frSize) >= SettingFragment.freeSpace/1024/1024)) {
                 print_error(2);
@@ -146,8 +144,9 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private boolean customSelection(){
+    private boolean customSelection() {
         boolean seleted = false;
+        Log.e("yangjun", "xxxxxxxx:" + sharedPref.getBoolean(SettingFragment.KEY_SQL_INSERT, false));
         if(sharedPref.getBoolean(SettingFragment.KEY_SEQ_WRITE, false)
                 || sharedPref.getBoolean(SettingFragment.KEY_SEQ_READ, false)
                 || sharedPref.getBoolean(SettingFragment.KEY_RAN_WRITE, false)
@@ -156,9 +155,10 @@ public class MeasureFragment extends Fragment implements View.OnClickListener {
                 || sharedPref.getBoolean(SettingFragment.KEY_SQL_UPDATE, false)
                 || sharedPref.getBoolean(SettingFragment.KEY_SQL_DELETE, false)) {
             seleted = true;
-        }else{
+        } else {
             seleted = false;
         }
+        Log.e("yangjun", "select:" + seleted);
         return seleted;
     }
 

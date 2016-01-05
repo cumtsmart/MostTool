@@ -27,7 +27,7 @@
         android:orientation="horizontal">
         <Button
             android:id="@+id/btn_all"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:textAllCaps="false"
@@ -35,7 +35,7 @@
 
         <Button
             android:id="@+id/btn_sql"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:textAllCaps="false"
@@ -49,14 +49,14 @@
         android:orientation="horizontal">
     <Button
         android:id="@+id/btn_fio"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:textAllCaps="false"
         android:text="File IO"/>
     <Button
         android:id="@+id/btn_ctm"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:textAllCaps="false"

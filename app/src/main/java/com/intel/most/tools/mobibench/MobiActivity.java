@@ -1,10 +1,13 @@
 package com.intel.most.tools.mobibench;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.SharedPreferences;
+import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -13,7 +16,9 @@ import com.intel.most.tools.mobibench.fragment.HistoryFragment;
 import com.intel.most.tools.mobibench.fragment.MeasureFragment;
 import com.intel.most.tools.mobibench.fragment.SettingFragment;
 
-public class MobiActivity extends AppCompatActivity {
+import esos.MobiBench.MobiBenchExe;
+
+public class MobiActivity extends Activity {
 
     private ViewPager viewPager;
     private MyPagerAdapter myPagerAdapter;
@@ -39,6 +44,22 @@ public class MobiActivity extends AppCompatActivity {
         measureFragment = new MeasureFragment();
         historyFragment = new HistoryFragment();
         settingFragment = new SettingFragment();
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String frValue = sharedPref.getString(SettingFragment.KEY_PARTITION, "");
+        calculateFreeSpace(frValue);
+    }
+
+    private void calculateFreeSpace(String path) {
+        String target_path = null;
+        if (path.equals("/data")) {
+            target_path = Environment.getDataDirectory().getPath();
+        } else if (path.equals("/sdcard")) {
+            target_path = getExternalFilesDirs(null)[0].getAbsolutePath();
+        } else if (path.equals("/extSdCard")) {
+            target_path = MobiBenchExe.sdcard_2nd_path;
+        }
+        SettingFragment.freeSpace = StorageOptions.getAvailableSize(target_path);
     }
 
     class MyPagerAdapter extends FragmentPagerAdapter {
