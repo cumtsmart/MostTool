@@ -2,7 +2,7 @@ package com.intel.most.tools.utils;
 
 public class Constant {
     public static final String FILE_SYSTEM = "EXT4";
-
+    public static final String MOST_BIN = "mostbin.zip";
     public class CMD {
         public static final String CMD_MOST = "/data/most ";
         public static final String CMD_TRACE = "/data/blktrace ";

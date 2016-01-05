@@ -20,6 +20,10 @@ import android.widget.EditText;
 
 import com.intel.most.tools.handler.BaseHandler;
 import com.intel.most.tools.mobibench.MobiActivity;
+import com.intel.most.tools.utils.Constant;
+import com.intel.most.tools.utils.UnzipAssets;
+
+import java.io.IOException;
 
 import eu.chainfire.libsuperuser.Shell;
 
@@ -119,10 +123,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        // TODO
         progressDialog.setMessage("progress");
         progressDialog.setMax(100);
         progressDialog.setCancelable(false);
+
+        // Unzip mostbin
+        String outputDirectory = getExternalFilesDirs(null)[0].getPath();
+        Log.e("yangjun", "most bin path:" + outputDirectory);
+        try {
+            UnzipAssets.unZip(this, Constant.MOST_BIN, outputDirectory, true);
+        } catch (IOException e) {
+            Log.e("yangjun", "----- unzip exception -----");
+            e.printStackTrace();
+        }
     }
 
     protected void onStart() {
