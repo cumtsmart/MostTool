@@ -1,1 +1,1 @@
-include ':libsuperuser',':app'
+include ':tabstrip',':libsuperuser',':app'

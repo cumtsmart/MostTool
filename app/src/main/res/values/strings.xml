@@ -2,4 +2,93 @@
     <string name="app_name">Most</string>
     <string name="action_settings">Settings</string>
     <string name="read_me">1. Click start to start blktrace.\n2. Open your test app.\n3. Click stop to stop blktrace.\n4. Click most to generate most log.\n5. Enter your app package name and click filter.\n6. Click graph to display result.</string>
+
+    <string-array name="partition">
+        <item>/data</item>
+        <item>/sdcard</item>
+        <item>/extSdCard</item>
+    </string-array>
+
+    <string-array name="partition_value">
+        <item>/data</item>
+        <item>/sdcard</item>
+        <item>/extSdCard</item>
+    </string-array>
+
+
+    <string-array name="partition2">
+        <item>/data</item>
+        <item>/sdcard</item>
+    </string-array>
+    <string-array name="partition2_value">
+        <item>/data</item>
+        <item>/sdcard</item>
+        <item>/extSdCard</item>
+    </string-array>
+
+    <string-array name="io_size_entries">
+        <item>4 KB</item>
+        <item>8 KB</item>
+        <item>16 KB</item>
+        <item>16 KB</item>
+        <item>128 KB</item>
+        <item>512 KB</item>
+    </string-array>
+    <string-array name="io_size_value">
+        <item>4</item>
+        <item>8</item>
+        <item>16</item>
+        <item>16</item>
+        <item>128</item>
+        <item>512</item>
+    </string-array>
+
+    <string-array name="file_sync_entries">
+        <item>Normal</item>
+        <item>Sync+direct</item>
+        <item>O_SYNC</item>
+        <item>O_DIRECT</item>
+        <item>fsync</item>
+        <item>mmap</item>
+        <item>mmap+MS_SYNC</item>
+        <item>mmap+MS_ASYNC</item>
+    </string-array>
+    <string-array name="file_sync_value">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </string-array>
+
+    <string-array name="file_sql_entries">
+        <item>Off</item>
+        <item>Normal</item>
+        <item>Full</item>
+    </string-array>
+    <string-array name="file_sql_value">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="file_journal_entries">
+        <item>Delete</item>
+        <item>Truncate</item>
+        <item>Persist</item>
+        <item>Wal</item>
+        <item>Memory</item>
+        <item>Off</item>
+    </string-array>
+    <string-array name="file_journal_value">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
 </resources>

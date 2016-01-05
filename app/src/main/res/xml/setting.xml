@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="General">
+        <ListPreference
+            android:key="partition_n"
+            android:title="Partition"
+            android:defaultValue="/data"
+            />
+        <EditTextPreference
+            android:key="pref_thd_n"
+            android:title="Number of Threads"
+            android:defaultValue="1"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="File IO">
+        <CheckBoxPreference
+            android:key="ran_read"
+            android:summary=""
+            android:title="Random read"
+            android:defaultValue="false" />
+        <CheckBoxPreference
+            android:key="ran_write"
+            android:summary=""
+            android:title="Random write"
+            android:defaultValue="false" />
+        <CheckBoxPreference
+            android:key="seq_read"
+            android:summary=""
+            android:title="Sequence read"
+            android:defaultValue="false" />
+        <CheckBoxPreference
+            android:key="seq_write"
+            android:summary=""
+            android:title="Sequence write"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="SQLite">
+        <CheckBoxPreference
+            android:key="sql_insert"
+            android:summary=""
+            android:title="SQLite insert"
+            android:defaultValue="false" />
+        <CheckBoxPreference
+            android:key="sql_delete"
+            android:summary=""
+            android:title="SQLite delete"
+            android:defaultValue="false" />
+        <CheckBoxPreference
+            android:key="sql_update"
+            android:summary=""
+            android:title="SQLite update"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Misc">
+        <EditTextPreference
+            android:key="fr_size"
+            android:title="File size(R)"
+            android:defaultValue="32"
+            android:dependency="partition_n"/>
+        <EditTextPreference
+            android:key="fw_size"
+            android:title="File size(W)"
+            android:defaultValue="10"/>
+        <ListPreference
+            android:key="io_size"
+            android:title="IO size"
+            android:entries="@array/io_size_entries"
+            android:entryValues="@array/io_size_value"
+            android:defaultValue="4"/>
+        <ListPreference
+            android:key="syc_mode"
+            android:title="Sync Mode(File IO)"
+            android:entries="@array/file_sync_entries"
+            android:entryValues="@array/file_sync_value"
+            android:defaultValue="3"/>
+        <EditTextPreference
+            android:key="sql_trans"
+            android:title="Transaction(SQLite)"
+            android:defaultValue="100"/>
+        <ListPreference
+            android:key="sql_mode"
+            android:title="Mode(SQLite)"
+            android:entries="@array/file_sql_entries"
+            android:entryValues="@array/file_sql_value"
+            android:defaultValue="2"/>
+        <ListPreference
+            android:key="sql_jour"
+            android:title="Journal(SQLite)"
+            android:entries="@array/file_journal_entries"
+            android:entryValues="@array/file_journal_value"
+            android:defaultValue="1"/>
+    </PreferenceCategory>
+</PreferenceScreen>
