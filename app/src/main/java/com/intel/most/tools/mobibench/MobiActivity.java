@@ -47,7 +47,11 @@ public class MobiActivity extends Activity {
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         String frValue = sharedPref.getString(SettingFragment.KEY_PARTITION, "");
-        calculateFreeSpace(frValue);
+        if (frValue.equals("")) {
+            calculateFreeSpace("/data");
+        } else {
+            calculateFreeSpace(frValue);
+        }
     }
 
     private void calculateFreeSpace(String path) {
