@@ -28,11 +28,11 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".mobibench.MobiActivity"
-            android:label="Mobibench"
+            android:label="IObench"
             android:screenOrientation="portrait" />
         <activity
             android:name=".mobibench.ResultActivity"
-            android:label="Mobibench Result"
+            android:label="IObench Result"
             android:screenOrientation="portrait" />
 
         <service android:name=".ShellService" />
