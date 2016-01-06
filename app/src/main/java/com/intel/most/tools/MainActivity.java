@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.EditText;
 
 import com.intel.most.tools.handler.BaseHandler;
 import com.intel.most.tools.mobibench.MobiActivity;
@@ -34,14 +33,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private Button mFilter;
     private Button mGoto;
 
-    private EditText mEditText;
-
     private boolean mBound;
     private ShellService mShellService;
 
     public static final int SHOW_DIALOG = 1;
     public static final int UPDATE_PROGRESS = 2;
     public static final int DISMISS_DIALOG = 3;
+
+    private static final int PICKED_ACTIVITY = 0;
+    private String launchedProcess;
 
     private ProgressDialog progressDialog;
 
@@ -58,7 +58,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Log.e("yangjun", "------handleMessage------");
                 switch (msg.what) {
                     case SHOW_DIALOG:
-                        activity.showDialog();
+                        activity.displayDialog(msg.arg1);
                         break;
                     case UPDATE_PROGRESS:
                         int progress = msg.arg1;
@@ -72,8 +72,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    public void showDialog() {
+    public void displayDialog(int type) {
         Log.e("yangjun", "show");
+        if (type == ShellService.MOST) {
+            progressDialog.setMessage("Most Log");
+        } else {
+            progressDialog.setMessage("Filter Log");
+        }
         progressDialog.show();
         progressDialog.onStart();
         progressDialog.setProgress(0);
@@ -111,9 +116,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mStart = (Button) findViewById(R.id.start);
         mStop = (Button) findViewById(R.id.stop);
         mMost = (Button) findViewById(R.id.most);
-        mFilter = (Button) findViewById(R.id.filter);
         mGoto = (Button) findViewById(R.id.to_graph);
-        mEditText = (EditText) findViewById(R.id.pack_name);
+        mFilter = (Button) findViewById(R.id.filter);
 
         mStart.setOnClickListener(this);
         mStop.setOnClickListener(this);
@@ -123,19 +127,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setMessage("progress");
         progressDialog.setMax(100);
         progressDialog.setCancelable(false);
-
-        // Unzip mostbin
-        String outputDirectory = getExternalFilesDirs(null)[0].getPath();
-        Log.e("yangjun", "most bin path:" + outputDirectory);
-        try {
-            UnzipAssets.unZip(this, Constant.MOST_BIN, outputDirectory, true);
-        } catch (IOException e) {
-            Log.e("yangjun", "----- unzip exception -----");
-            e.printStackTrace();
-        }
     }
 
     protected void onStart() {
@@ -207,7 +200,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
             Snackbar.make(view, "SU not available", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }
+
         mShellService.handleStart();
+        Intent intent = new Intent(this, AppListActivity.class);
+        startActivityForResult(intent, PICKED_ACTIVITY);
     }
 
     private void handleStop(View view) {
@@ -233,7 +229,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mStop.setEnabled(false);
         mMost.setEnabled(true);
         mFilter.setEnabled(true);
-        String packName = mEditText.getText().toString().trim();
-        mShellService.filterLog(packName);
+        if (!launchedProcess.equals("")) {
+            mShellService.filterLog(launchedProcess);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICKED_ACTIVITY && resultCode == Activity.RESULT_OK) {
+            launchedProcess = data.getStringExtra("processName");
+            Log.e("yangjun", launchedProcess);
+        }
     }
 }

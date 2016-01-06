@@ -113,21 +113,11 @@ public class GraphActivity extends Activity implements View.OnClickListener {
         partBartChart.setData(barData);
         partBartChart.invalidate();
 
-
         ioPercentChart = (PieChart)findViewById(R.id.io_percent);
         ioPercentChart.setUsePercentValues(true);
         ioPercentChart.setDescription("");
-        ioPercentChart.setExtraOffsets(5, 10, 5, 5);
-
         ioPercentChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
-
-        ioPercentChart.setTransparentCircleColor(Color.WHITE);
-        ioPercentChart.setTransparentCircleAlpha(110);
-        ioPercentChart.setHoleRadius(58f);
-        ioPercentChart.setTransparentCircleRadius(61f);
-        ioPercentChart.setDrawCenterText(true);
         ioPercentChart.setRotationAngle(0);
-
         // enable rotation of the chart by touch
         ioPercentChart.setRotationEnabled(true);
         ioPercentChart.setHighlightPerTapEnabled(true);
@@ -195,31 +185,37 @@ public class GraphActivity extends Activity implements View.OnClickListener {
     private void addVisitFiles(GraphData graphData) {
         List<Partition> partitions = graphData.getPartitions();
         StringBuffer result1 = new StringBuffer();
+        int index = 1;
         for (String file : partitions.get(0).visitFiles) {
             if (file.length() > 0) {
-                result1.append("/cache" + file + "\n");
+                result1.append(index + ": /cache" + file + "\n");
                 cacheFiles.setVisibility(View.VISIBLE);
                 cacheTitle.setVisibility(View.VISIBLE);
+                index++;
             }
         }
         cacheFiles.setText(result1);
 
         StringBuffer result2 = new StringBuffer();
+        index = 1;
         for (String file : partitions.get(1).visitFiles) {
             if (file.length() > 0) {
-                result2.append("/data" + file + "\n");
+                result2.append(index + ": /data" + file + "\n");
                 dataFiles.setVisibility(View.VISIBLE);
                 dataTitle.setVisibility(View.VISIBLE);
+                index++;
             }
         }
         dataFiles.setText(result2);
 
         StringBuffer result3 = new StringBuffer();
+        index = 1;
         for (String file : partitions.get(2).visitFiles) {
             if (file.length() > 0) {
-                result3.append("/system" + file + "\n");
+                result3.append(index + ": /system" + file + "\n");
                 systemFiles.setVisibility(View.VISIBLE);
                 systemTitle.setVisibility(View.VISIBLE);
+                index++;
             }
         }
         systemFiles.setText(result3);

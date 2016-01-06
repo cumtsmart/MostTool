@@ -34,6 +34,11 @@
             android:name=".mobibench.ResultActivity"
             android:label="IObench Result"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".AppListActivity"
+            android:label="Choose your test app"
+            android:screenOrientation="portrait">
+        </activity>
 
         <service android:name=".ShellService" />
 

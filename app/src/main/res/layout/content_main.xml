@@ -10,7 +10,6 @@
     tools:showIn="@layout/activity_main" tools:context=".MainActivity"
     android:orientation="vertical">
 
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,17 +17,6 @@
         android:text="@string/read_me"
         android:textSize="20sp"
         android:textColor="#000000"/>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="20dp" />
-
-    <EditText
-        android:id="@+id/pack_name"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:singleLine="true"
-        android:hint="test app package name"/>
 
     <Space
         android:layout_width="match_parent"
@@ -57,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:enabled="false"
-            android:text="most"/>
+            android:text="most" />
 
         <Button
             android:id="@+id/filter"

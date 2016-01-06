@@ -33,31 +33,6 @@ public class ResultActivity extends ListActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
     }
@@ -68,11 +43,11 @@ public class ResultActivity extends ListActivity {
 
     class ViewHolder {
         ImageView typeImg;
-        TextView titleText;
         TextView  cpuText;
         TextView  ctxText;
-
+        TextView titleText;
     }
+
     class ResultAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
 
@@ -80,6 +55,7 @@ public class ResultActivity extends ListActivity {
             mInflater = LayoutInflater.from(context);
 
         }
+
         @Override
         public int getCount() {
             return mData.size();
@@ -87,7 +63,7 @@ public class ResultActivity extends ListActivity {
 
         @Override
         public Object getItem(int i) {
-            return null;
+            return mData.get(i);
         }
 
         @Override

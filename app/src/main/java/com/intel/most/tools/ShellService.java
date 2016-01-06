@@ -23,6 +23,10 @@ public class ShellService extends Service {
     private IBinder mBinder = new LocalBinder();
     private Messenger mMessenger;
 
+    static int MOST = 0;
+    static int FILTER = 1;
+
+
     @Override
     public IBinder onBind(Intent intent) {
         Log.e("yangjun", "====== onBind =======");
@@ -112,7 +116,7 @@ public class ShellService extends Service {
         String mostDataCmd = Constant.CMD.CMD_MOST + Constant.FILE_SYSTEM + Constant.PARTITION.PART_DATA + Constant.PATH.BLK_PARSE + Constant.PATH.MOST_DATA;
         String mostSystemCmd = Constant.CMD.CMD_MOST + Constant.FILE_SYSTEM + Constant.PARTITION.PART_SYSTEM + Constant.PATH.BLK_PARSE + Constant.PATH.MOST_SYSTEM;
 
-        new MostTask().execute(parseCmd, mostCacheCmd, mostDataCmd, mostSystemCmd);
+        new MostTask(MOST).execute(parseCmd, mostCacheCmd, mostDataCmd, mostSystemCmd);
     }
 
     public void filterLog(String procKeyword) {
@@ -126,10 +130,15 @@ public class ShellService extends Service {
         String filterDataCmd = Constant.CMD.CMD_FILTER + Constant.PATH.MOST_DATA  + dataFile.getAbsolutePath() + " " + procKeyword;
         String filterSystemCmd = Constant.CMD.CMD_FILTER + Constant.PATH.MOST_SYSTEM + systemFile.getAbsolutePath() + " " + procKeyword;
 
-        new MostTask().execute(filterCacheCmd, filterDataCmd, filterSystemCmd);
+        new MostTask(FILTER).execute(filterCacheCmd, filterDataCmd, filterSystemCmd);
     }
 
     private class MostTask extends AsyncTask<String, Integer, String> {
+        private int cmdType;
+
+        public MostTask(int type) {
+            cmdType = type;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -137,6 +146,8 @@ public class ShellService extends Service {
             // UI thread
             Message msg = new Message();
             msg.what = MainActivity.SHOW_DIALOG;
+            msg.arg1 = cmdType;
+
             try {
                 mMessenger.send(msg);
             } catch (RemoteException e) {
